@@ -14,6 +14,8 @@
                             <thead>
                             <tr>
                                 <th class="px-6 py-3 bg-gray-50 text-left">
+                                </th>
+                                <th class="px-6 py-3 bg-gray-50 text-left">
                                     <span class="text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Name</span>
                                 </th>
                                 <th class="px-6 py-3 bg-gray-50 text-left">
@@ -25,6 +27,11 @@
                             <tbody class="bg-white divide-y divide-gray-200 divide-solid">
                             @foreach($users as $user)
                                 <tr class="bg-white">
+                                    <td class="px-6 py-4">
+                                        @if($user->avatar)
+                                            <img src="{{ asset("avatars/{$user->avatar}") }}" class="w-14 h-14">
+                                        @endif
+                                    </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
                                         {{ $user->name }}
                                     </td>
