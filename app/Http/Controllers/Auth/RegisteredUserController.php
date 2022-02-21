@@ -40,14 +40,14 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $request->file('avatar')->storePubliclyAs('avatars', $request->file('avatar')->getClientOriginalName(), 'public');
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'avatar' => $request->file('avatar')->getClientOriginalName() ?? null,
         ]);
+
+        $request->file('avatar')->storePubliclyAs("avatars/{$user->id}", $request->file('avatar')->getClientOriginalName(), 'public');
 
         event(new Registered($user));
 
