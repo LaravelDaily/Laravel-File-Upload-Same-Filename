@@ -28,8 +28,8 @@
                             @foreach($users as $user)
                                 <tr class="bg-white">
                                     <td class="px-6 py-4">
-                                        @if($user->avatar)
-                                            <img src="{{ asset("avatars/{$user->avatar}") }}" class="w-14 h-14">
+                                        @if($user->getFirstMedia('avatars'))
+                                            <img src="{{ $user->getFirstMediaUrl('avatars') }}" class="w-14 h-14">
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-900">
