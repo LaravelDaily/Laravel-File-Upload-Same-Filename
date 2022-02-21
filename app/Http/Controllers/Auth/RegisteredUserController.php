@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -40,16 +41,23 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $request->file('avatar')->storePubliclyAs('avatars', $request->file('avatar')->getClientOriginalName(), 'public');
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'avatar' => $request->file('avatar')->getClientOriginalName() ?? null,
         ]);
 
         event(new Registered($user));
+
+        if ($request->file('avatar')) {
+            $fileName = pathinfo($request->file('avatar')->getClientOriginalName(), PATHINFO_FILENAME) . '-' . $user->id . '.' . $request->file('avatar')->getClientOriginalExtension();
+
+            $request->file('avatar')->storePubliclyAs('avatars', $fileName, 'public');
+
+            $user->update([
+                'avatar' => $fileName ?? null,
+            ]);
+        }
 
         Auth::login($user);
 
